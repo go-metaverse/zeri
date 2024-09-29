@@ -23,10 +23,14 @@ func createLogger(config *Config, opts ...zap.Option) (*zap.Logger, error) {
 	// Get the appropriate zap config (development or production)
 	zapConfig := getZapConfigByMode(config.EnableDevMode)
 
-	// Set log level if present in map
-	if level, exists := logLevelMap[utils.DefaultIfEmpty(config.Level, LevelInfo)]; exists {
-		zapConfig.Level = zap.NewAtomicLevelAt(level)
+	// Set log level
+	if !config.EnableDevMode {
+		zapConfig.Level = zap.NewAtomicLevelAt(logLevelMap[utils.DefaultIfEmpty(config.Level, LevelInfo)])
 	}
+
+	// Caller and stacktrace configuration
+	zapConfig.DisableCaller = config.DisableCaller
+	zapConfig.DisableStacktrace = config.DisableStacktrace
 
 	// Encode configuration
 	zapConfig.Encoding = string(getEncodeByMode(config.EnableDevMode, config.Encoding))

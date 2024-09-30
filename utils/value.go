@@ -1,22 +1,6 @@
 package utils
 
-import "reflect"
-
-// IsZero checks if the given value is considered "zero" in Go.
-// It can determine if a slice is empty or if a value is the zero value for its type.
-//
-// Parameters:
-// - in: The value to be checked.
-//
-// Returns:
-// - A boolean indicating whether the value is zero (true) or not (false).
-func IsZero(in interface{}) bool {
-	v := reflect.ValueOf(in)
-	if v.Kind() == reflect.Slice {
-		return v.Len() == 0
-	}
-	return !v.IsValid() || reflect.DeepEqual(v.Interface(), reflect.Zero(v.Type()).Interface())
-}
+import "github.com/go-metaverse/zeri/validate"
 
 // DefaultIfEmpty returns the fallback value if the provided value is considered empty or zero.
 // It uses the IsZero function to determine if the value is empty.
@@ -28,7 +12,7 @@ func IsZero(in interface{}) bool {
 // Returns:
 // - The original value if it is not empty; otherwise, the fallback value.
 func DefaultIfEmpty[T any](value any, fallback T) T {
-	if IsZero(value) {
+	if validate.IsZero(value) {
 		return fallback
 	}
 
@@ -65,7 +49,7 @@ func OptionalKey(disabled bool, key string) string {
 // - The value from the map if it exists and is not zero; otherwise, the default value.
 func GetFromInterface[T any](src map[string]interface{}, key string, defaultValue T, checkZeroValue ...bool) T {
 	value, exists := src[key]
-	if !exists || (IsZero(value) && len(checkZeroValue) > 0 && checkZeroValue[0]) {
+	if !exists || (validate.IsZero(value) && len(checkZeroValue) > 0 && checkZeroValue[0]) {
 		return defaultValue
 	}
 	return value.(T)

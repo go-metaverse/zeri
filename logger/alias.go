@@ -1,6 +1,6 @@
 package logger
 
-type Attributes map[string]interface{}
+type Attributes map[string]any
 
 type LevelType string
 

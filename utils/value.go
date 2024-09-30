@@ -40,14 +40,14 @@ func OptionalKey(disabled bool, key string) string {
 // it returns the default value.
 //
 // Parameters:
-// - src: A map of string keys to interface{} values.
+// - src: A map of string keys to any values.
 // - key: The key to look up in the map.
 // - defaultValue: The value to return if the key does not exist or if the value is zero.
 // - checkZeroValue: An optional boolean flag to check if zero values should be considered invalid.
 //
 // Returns:
 // - The value from the map if it exists and is not zero; otherwise, the default value.
-func GetFromInterface[T any](src map[string]interface{}, key string, defaultValue T, checkZeroValue ...bool) T {
+func GetFromInterface[T any](src map[string]any, key string, defaultValue T, checkZeroValue ...bool) T {
 	value, exists := src[key]
 	if !exists || (validate.IsZero(value) && len(checkZeroValue) > 0 && checkZeroValue[0]) {
 		return defaultValue

@@ -20,7 +20,7 @@ func init() {
 // Any panic that occurs within the goroutine is recovered and logged.
 //
 // Parameters:
-// - fn: The function to be invoked in the new goroutine. It must be of type `interface{}` to allow flexibility.
+// - fn: The function to be invoked in the new goroutine. It must be of type `any` to allow flexibility.
 // - args: A variadic list of arguments to pass to the invoked function.
 //
 // Notes:
@@ -32,7 +32,7 @@ func init() {
 //	Run(func(msg string) {
 //	    log.Infof("Message: %s", msg)
 //	}, "Hello, world!")
-func Run(fn interface{}, args ...interface{}) {
+func Run(fn any, args ...any) {
 	go func() {
 		defer recoverPanic() // Recover from any panics within the goroutine and log the error.
 		invoke(fn, args)     // Dynamically call the provided function with arguments.
@@ -48,7 +48,7 @@ func Run(fn interface{}, args ...interface{}) {
 // Notes:
 // - The function is dynamically invoked using reflection.
 // - If fn is not of type `func`, an error is logged, and the function is not called.
-func invoke(fn interface{}, args []interface{}) {
+func invoke(fn any, args []any) {
 	funcValue := reflect.ValueOf(fn)
 
 	if funcValue.Kind() != reflect.Func {

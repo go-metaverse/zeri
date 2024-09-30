@@ -15,7 +15,7 @@ import (
 //
 // Returns:
 // - bool: true if the value is zero; false otherwise.
-func IsZero(in interface{}) bool {
+func IsZero(in any) bool {
 	v := reflect.ValueOf(in)
 	switch v.Kind() {
 	case reflect.Slice, reflect.Array:
@@ -33,7 +33,7 @@ func IsZero(in interface{}) bool {
 //
 // Returns:
 // - error: An error if the primary key is missing or its value is zero, nil otherwise.
-func IsPrimaryKeyNonZero(in interface{}) error {
+func IsPrimaryKeyNonZero(in any) error {
 	v := reflect.ValueOf(in)
 	t := v.Type()
 
